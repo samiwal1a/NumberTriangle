@@ -107,19 +107,16 @@ public class NumberTriangle {
     public static NumberTriangle loadTriangle(String fname) throws IOException {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-        Object top = null;
-        ArrayList<Object> prevRow = new ArrayList<>();
-
-        String line = br.readLine();
+        NumberTriangle top = null;
+        ArrayList<NumberTriangle> prevRow = new ArrayList<>();
+        String line;
         while ((line = br.readLine()) != null) {
-            String[] tokens = line.trim().split(" ");
-            ArrayList<Object> currRow = new ArrayList<>();
+            String[] tokens = line.trim().split("\\s+");
+            ArrayList<NumberTriangle> currRow = new ArrayList<>();
             for (String token : tokens) {
                 currRow.add(new NumberTriangle(Integer.parseInt(token)));
             }
-            if (top == null) {
-                top = currRow.get(0);
-            }
+            if (top == null) top = (NumberTriangle) currRow.get(0);
             if (!prevRow.isEmpty()) {
                 for (int i = 0; i < prevRow.size(); i++) {
                     prevRow.get(i).setLeft(currRow.get(i));
