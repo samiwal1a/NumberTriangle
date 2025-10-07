@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is the provided NumberTriangle class to be used in this coding task.
@@ -104,31 +105,30 @@ public class NumberTriangle {
      * @throws IOException may naturally occur if an issue reading the file occurs
      */
     public static NumberTriangle loadTriangle(String fname) throws IOException {
-        // open the file and get a BufferedReader object whose methods
-        // are more convenient to work with when reading the file contents.
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-
-
-        // TODO define any variables that you want to use to store things
-
-        // will need to return the top of the NumberTriangle,
-        // so might want a variable for that.
         NumberTriangle top = null;
+        ArrayList<NumberTriangle> prevRow = new ArrayList<>();
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] tokens = line.trim().split("\\s+");
+            ArrayList<NumberTriangle> currRow = new ArrayList<>();
+            for (String token : tokens) {
+                currRow.add(new NumberTriangle(Integer.parseInt(token)));
+            }
+            if (top == null) top = (NumberTriangle) currRow.get(0);
+            if (!prevRow.isEmpty()) {
+                for (int i = 0; i < prevRow.size(); i++) {
+                    prevRow.get(i).setLeft(currRow.get(i));
+                    prevRow.get(i).setRight(currRow.get(i + 1));
+                }
+            }
 
-        String line = br.readLine();
-        while (line != null) {
-
-            // remove when done; this line is included so running starter code prints the contents of the file
-            System.out.println(line);
-
-            // TODO process the line
-
-            //read the next line
-            line = br.readLine();
+            prevRow = currRow;
         }
         br.close();
-        return top;
+
+        return (NumberTriangle) top;
     }
 
     public static void main(String[] args) throws IOException {
